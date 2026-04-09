@@ -1,135 +1,199 @@
-// Load from localStorage or initialize
 let users = JSON.parse(localStorage.getItem("users")) || [];
+let properties = JSON.parse(localStorage.getItem("properties")) || [];
 let workspaces = JSON.parse(localStorage.getItem("workspaces")) || [];
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
 
-// SAVE helper
-function saveData() {
+function save() {
   localStorage.setItem("users", JSON.stringify(users));
+  localStorage.setItem("properties", JSON.stringify(properties));
   localStorage.setItem("workspaces", JSON.stringify(workspaces));
 }
 
-// REGISTER
+// ================= USERS =================
+
 function addUser() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const role = document.getElementById("role").value;
+  users.push({
+    name: name.value,
+    email: email.value,
+    phone: phone.value,
+    password: password.value,
+    role: role.value
+  });
 
-  if (!name || !email || !password) {
-    document.getElementById("message").textContent = "Fill all fields";
-    return;
-  }
-
-  users.push({ name, email, password, role });
-  saveData();
-
-  document.getElementById("message").textContent = "Account created!";
+  save();
+  message.textContent = "User created!";
 }
 
-// LOGIN
 function login() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-
-  const user = users.find(u => u.email === email && u.password === password);
+  const user = users.find(u =>
+    u.email === loginEmail.value &&
+    u.password === loginPassword.value
+  );
 
   if (!user) {
-    document.getElementById("loginMessage").textContent = "Invalid login";
+    loginMessage.textContent = "Invalid login";
     return;
   }
 
   currentUser = user;
   localStorage.setItem("currentUser", JSON.stringify(user));
 
-  if (user.role === "owner") {
-    window.location.href = "owner.html";
-  } else {
-    window.location.href = "index.html";
-  }
+  window.location.href = user.role === "owner"
+    ? "owner.html"
+    : "index.html";
 }
 
-// ADD WORKSPACE
-function addWorkspace() {
-  const propertyName = document.getElementById("propertyName").value;
-  const location = document.getElementById("location").value;
-  const price = document.getElementById("price").value;
+// ================= PROPERTY =================
 
-  if (!propertyName || !location || !price) {
-    document.getElementById("ownerMessage").textContent = "Fill all fields";
-    return;
-  }
-
-  workspaces.push({
-    propertyName,
-    location,
-    price,
+function addProperty() {
+  properties.push({
+    id: Date.now(),
+    address: address.value,
+    neighborhood: neighborhood.value,
+    sqft: sqft.value,
+    parking: parking.checked,
+    transport: transport.checked,
     owner: currentUser.email
   });
 
-  saveData();
-
-  document.getElementById("ownerMessage").textContent = "Workspace added!";
-  displayWorkspaces();
+  save();
+  displayOwner();
 }
 
-// SEARCH + DISPLAY
-function searchWorkspaces() {
-  const location = document.getElementById("searchLocation").value.toLowerCase();
+// ================= WORKSPACE =================
 
-  let filtered = workspaces.filter(w =>
-    w.location.toLowerCase().includes(location)
+function addWorkspace() {
+  workspaces.push({
+    id: Date.now(),
+    propertyId: properties[properties.length - 1].id,
+    type: type.value,
+    seats: seats.value,
+    smoking: smoking.checked,
+    date: date.value,
+    lease: lease.value,
+    price: price.value,
+    ratings: [],
+    reviews: []
+  });
+
+  save();
+  displayOwner();
+}
+
+// ================= SEARCH =================
+
+function searchWorkspaces() {
+  let list = workspaces.map(w => {
+    let p = properties.find(x => x.id === w.propertyId);
+    return { ...w, property: p };
+  });
+
+  list = list.filter(w =>
+    w.property?.address.toLowerCase().includes(searchLocation.value.toLowerCase())
   );
 
-  displayResults(filtered);
-}
+  if (maxPrice.value)
+    list = list.filter(w => Number(w.price) <= Number(maxPrice.value));
 
-// DISPLAY RESULTS
-function displayResults(list) {
-  const resultsDiv = document.getElementById("results");
-  resultsDiv.innerHTML = "";
+  if (minSeats.value)
+    list = list.filter(w => Number(w.seats) >= Number(minSeats.value));
 
-  list.forEach((w, index) => {
+  if (filterParking.checked)
+    list = list.filter(w => w.property?.parking);
+
+  // SORT
+  if (sortBy.value === "priceLow")
+    list.sort((a,b) => a.price - b.price);
+
+  if (sortBy.value === "priceHigh")
+    list.sort((a,b) => b.price - a.price);
+
+  if (sortBy.value === "rating")
+    list.sort((a,b) => avg(b.ratings) - avg(a.ratings));
+
+  if (sortBy.value === "date")
+    list.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  results.innerHTML = "";
+
+  list.forEach(w => {
     let div = document.createElement("div");
-    div.classList.add("workspace");
+    div.className = "workspace";
 
     div.innerHTML = `
-      <h3>${w.propertyName}</h3>
-      <p>📍 ${w.location}</p>
-      <p>💲 $${w.price}</p>
+      <h3>${w.type}</h3>
+      <p>${w.property.address}</p>
+      <p>Seats: ${w.seats}</p>
+      <p>Price: $${w.price}</p>
+      <p>⭐ ${avg(w.ratings)}</p>
     `;
 
-    // OWNER CONTROLS
-    if (currentUser && currentUser.role === "owner" && w.owner === currentUser.email) {
-      let delBtn = document.createElement("button");
-      delBtn.textContent = "Delete";
-      delBtn.onclick = () => deleteWorkspace(index);
+    let rate = document.createElement("button");
+    rate.textContent = "Rate";
+    rate.onclick = () => {
+      let r = prompt("Rate 1-5");
+      w.ratings.push(Number(r));
+      save();
+      searchWorkspaces();
+    };
 
-      div.appendChild(delBtn);
-    }
+    let review = document.createElement("button");
+    review.textContent = "Review";
+    review.onclick = () => {
+      let text = prompt("Write review");
+      w.reviews.push(text);
+      save();
+      searchWorkspaces();
+    };
 
-    resultsDiv.appendChild(div);
+    div.appendChild(rate);
+    div.appendChild(review);
+
+    results.appendChild(div);
   });
 }
 
-// OWNER VIEW DISPLAY
-function displayWorkspaces() {
-  if (!currentUser) return;
+// ================= OWNER VIEW =================
 
-  let filtered = workspaces.filter(w => w.owner === currentUser.email);
-  displayResults(filtered);
+function displayOwner() {
+  if (!results) return;
+
+  results.innerHTML = "";
+
+  properties
+    .filter(p => p.owner === currentUser.email)
+    .forEach(p => {
+
+      let div = document.createElement("div");
+      div.className = "workspace";
+
+      div.innerHTML = `
+        <h3>${p.address}</h3>
+        <p>${p.neighborhood}</p>
+        <p>${p.sqft} sqft</p>
+      `;
+
+      let del = document.createElement("button");
+      del.textContent = "Delete";
+      del.onclick = () => {
+        properties = properties.filter(x => x.id !== p.id);
+        save();
+        displayOwner();
+      };
+
+      div.appendChild(del);
+      results.appendChild(div);
+    });
 }
 
-// DELETE
-function deleteWorkspace(index) {
-  workspaces.splice(index, 1);
-  saveData();
-  displayWorkspaces();
+function avg(arr) {
+  if (!arr.length) return 0;
+  return arr.reduce((a,b)=>a+b,0)/arr.length;
 }
 
-// AUTO LOAD (for owner page)
-window.onload = function () {
-  if (window.location.pathname.includes("owner.html")) {
-    displayWorkspaces();
+// AUTO LOAD
+window.onload = () => {
+  if (location.pathname.includes("owner.html")) {
+    displayOwner();
   }
 };

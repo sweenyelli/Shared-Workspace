@@ -14,19 +14,43 @@
 </header>
 
 <section>
+
+  <div class="card">
+    <h2>Add Property</h2>
+
+    <input id="address" placeholder="Address">
+    <input id="neighborhood" placeholder="Neighborhood">
+    <input id="sqft" type="number" placeholder="Square Feet">
+
+    <label><input type="checkbox" id="parking"> Parking</label>
+    <label><input type="checkbox" id="transport"> Public Transport</label>
+
+    <button onclick="addProperty()">Add Property</button>
+  </div>
+
   <div class="card">
     <h2>Add Workspace</h2>
 
-    <input type="text" id="propertyName" placeholder="Property Name">
-    <input type="text" id="location" placeholder="Location">
-    <input type="number" id="price" placeholder="Price">
+    <input id="type" placeholder="Type">
+    <input id="seats" type="number" placeholder="Seats">
+
+    <label><input type="checkbox" id="smoking"> Smoking</label>
+
+    <input id="date" type="date">
+
+    <select id="lease">
+      <option value="day">Day</option>
+      <option value="week">Week</option>
+      <option value="month">Month</option>
+    </select>
+
+    <input id="price" type="number" placeholder="Price">
 
     <button onclick="addWorkspace()">Add Workspace</button>
-
-    <p id="ownerMessage"></p>
   </div>
 
   <div id="results"></div>
+
 </section>
 
 <script src="script.js"></script>

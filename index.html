@@ -16,13 +16,30 @@
 </header>
 
 <section>
+
   <div class="card">
-    <h2>Find a Workspace</h2>
-    <input type="text" id="searchLocation" placeholder="Enter location">
+    <h2>Search Workspaces</h2>
+
+    <input id="searchLocation" placeholder="Location">
+
+    <input id="maxPrice" type="number" placeholder="Max Price">
+    <input id="minSeats" type="number" placeholder="Min Seats">
+
+    <label><input type="checkbox" id="filterParking"> Parking</label>
+
+    <select id="sortBy" onchange="searchWorkspaces()">
+      <option value="">Sort By</option>
+      <option value="priceLow">Price Low → High</option>
+      <option value="priceHigh">Price High → Low</option>
+      <option value="rating">Rating</option>
+      <option value="date">Date</option>
+    </select>
+
     <button onclick="searchWorkspaces()">Search</button>
   </div>
 
   <div id="results"></div>
+
 </section>
 
 <footer>
