@@ -3,83 +3,71 @@
 }
 
 body {
-  font-family: Arial;
+  font-family: 'Inter', Arial, sans-serif;
   margin: 0;
-  background: #f4f6fb;
-}
-
-/* edit*/
-html, body {
-  height: 100%;
-}
-
-body {
+  background: #f1f5f9;
+  color: #0f172a;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* makes page content grow and push footer down */
-section {
-  flex: 1;
-}
-
-/* FOOTER FIX */
-footer {
-  background: #1e293b;
-  color: white;
-  text-align: center;
-  padding: 15px;
-
-  margin-top: auto;
-}
-
-
 /* HEADER */
 header {
-  background: #1e293b;
+  background: #0f172a;
   color: white;
-  padding: 15px;
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-/* CARD FIX */
+nav a {
+  color: #cbd5f5;
+  margin-left: 15px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: white;
+}
+
+/* LAYOUT */
+section {
+  flex: 1;
+  padding: 20px;
+}
+
+/* CARD */
 .card {
   background: white;
   margin: 20px auto;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-
-  /* ⭐ KEY FIX */
-  width: 100%;
-  max-width: 500px;
+  border-radius: 14px;
+  max-width: 600px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 
-/* INPUT FIX (IMPORTANT) */
+/* INPUTS */
 input, select {
   width: 100%;
-  display: block;
-  padding: 10px;
+  padding: 12px;
   margin: 10px 0;
-
-  border: 1px solid #ccc;
-  border-radius: 6px;
-
-  /* prevents overflow issues */
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
   font-size: 14px;
 }
 
-/* BUTTON */
+/* BUTTONS */
 button {
-  padding: 10px;
+  padding: 12px;
   width: 100%;
+  border-radius: 8px;
+  border: none;
   background: #2563eb;
   color: white;
-  border: none;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 6px;
   margin-top: 10px;
 }
 
@@ -87,19 +75,56 @@ button:hover {
   background: #1d4ed8;
 }
 
-/* WORKSPACE CARD */
+button.secondary {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+button.danger {
+  background: #dc2626;
+}
+
+/* WORKSPACE LIST */
 .workspace {
   background: white;
   margin: 10px auto;
-  padding: 15px;
-  border-radius: 10px;
-  max-width: 500px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  padding: 16px;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* CENTER LOGIN/REGISTER */
-.center-box {
-  width: 100%;
-  max-width: 400px;
-  margin: 80px auto;
+/* FLEX ROW */
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+/* FOOTER */
+footer {
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+nav button {
+  background: #dc2626;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background: #b91c1c;
+}
+
+.secondary {
+  background: #64748b;
+  margin-top: 5px;
+}
+
+.secondary:hover {
+  background: #475569;
 }

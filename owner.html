@@ -8,48 +8,52 @@
 
 <header>
   <h1>Owner Dashboard</h1>
-  <nav>
-    <a href="index.html">Home</a>
-  </nav>
+    <nav id="navBar">
+        <a href="index.html">Home</a>
+    </nav>
 </header>
 
 <section>
 
-  <div class="card">
-    <h2>Add Property</h2>
+<div class="card">
+  <h2 id="propertyFormTitle">Add Property</h2>
 
-    <input id="address" placeholder="Address">
-    <input id="neighborhood" placeholder="Neighborhood">
-    <input id="sqft" type="number" placeholder="Square Feet">
+  <input id="address" placeholder="Address">
+  <input id="neighborhood" placeholder="Neighborhood">
+  <input id="sqft" type="number" placeholder="Square Feet">
 
-    <label><input type="checkbox" id="parking"> Parking</label>
-    <label><input type="checkbox" id="transport"> Public Transport</label>
+  <label><input type="checkbox" id="parking"> Parking</label>
+  <label><input type="checkbox" id="transport"> Public Transport</label>
 
-    <button onclick="addProperty()">Add Property</button>
-  </div>
+  <button onclick="saveProperty()">Save Property</button>
+  <button class="secondary" onclick="resetPropertyForm()">Cancel</button>
+</div>
 
-  <div class="card">
-    <h2>Add Workspace</h2>
+<div class="card">
+  <h2 id="workspaceFormTitle">Add Workspace</h2>
 
-    <input id="type" placeholder="Type">
-    <input id="seats" type="number" placeholder="Seats">
+  <select id="propertySelect"></select>
 
-    <label><input type="checkbox" id="smoking"> Smoking</label>
+  <input id="type" placeholder="Type">
+  <input id="seats" type="number" placeholder="Seats">
 
-    <input id="date" type="date">
+  <label><input type="checkbox" id="smoking"> Smoking</label>
 
-    <select id="lease">
-      <option value="day">Day</option>
-      <option value="week">Week</option>
-      <option value="month">Month</option>
-    </select>
+  <input id="date" type="date">
 
-    <input id="price" type="number" placeholder="Price">
+  <select id="lease">
+    <option value="day">Day</option>
+    <option value="week">Week</option>
+    <option value="month">Month</option>
+  </select>
 
-    <button onclick="addWorkspace()">Add Workspace</button>
-  </div>
+  <input id="price" type="number" placeholder="Price">
 
-  <div id="results"></div>
+  <button onclick="saveWorkspace()">Save Workspace</button>
+  <button class="secondary" onclick="resetWorkspaceForm()">Cancel</button>
+</div>
+
+<div id="results"></div>
 
 </section>
 

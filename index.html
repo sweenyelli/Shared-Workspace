@@ -8,37 +8,46 @@
 
 <header>
   <h1>Shared Workspace</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="login.html">Login</a>
-    <a href="register.html">Register</a>
-  </nav>
+    <nav id="navBar">
+      <a href="index.html">Home</a>
+    </nav>
 </header>
 
 <section>
 
-  <div class="card">
-    <h2>Search Workspaces</h2>
+<div class="card">
+  <h2>Search Workspaces</h2>
 
-    <input id="searchLocation" placeholder="Location">
+  <input id="searchLocation" placeholder="Location">
+  <input id="searchNeighborhood" placeholder="Neighborhood">
 
-    <input id="maxPrice" type="number" placeholder="Max Price">
-    <input id="minSeats" type="number" placeholder="Min Seats">
+  <input id="maxPrice" type="number" placeholder="Max Price">
+  <input id="minSeats" type="number" placeholder="Min Seats">
+  
+  <label>Available From:</label>
+  <input id="availableDate" type="date">
 
-    <label><input type="checkbox" id="filterParking"> Parking</label>
+  <label><input type="checkbox" id="filterParking"> Parking</label>
+  <label><input type="checkbox" id="filterTransport"> Public Transport</label>
+  <label><input type="checkbox" id="smokingFilter"> Smoking</label>
 
-    <select id="sortBy" onchange="searchWorkspaces()">
-      <option value="">Sort By</option>
-      <option value="priceLow">Price Low → High</option>
-      <option value="priceHigh">Price High → Low</option>
-      <option value="rating">Rating</option>
-      <option value="date">Date</option>
-    </select>
+  <select id="leaseFilter">
+    <option value="">Any Term</option>
+    <option value="day">Day</option>
+    <option value="week">Week</option>
+    <option value="month">Month</option>
+  </select>
 
-    <button onclick="searchWorkspaces()">Search</button>
-  </div>
+  <select id="sortBy">
+    <option value="">Sort By</option>
+    <option value="priceLow">Price Low → High</option>
+    <option value="priceHigh">Price High → Low</option>
+  </select>
 
-  <div id="results"></div>
+  <button id="searchBtn">Search</button>
+</div>
+
+<div id="results"></div>
 
 </section>
 
