@@ -205,67 +205,29 @@ function populatePropertyDropdown()
   });
 }
 
-function searchWorkspaces() 
-{
-  let list = workspaces.map(w => {
-    let p = properties.find(x => x.id === w.propertyId);
-    return { ...w, property: p };
-  });
+async function searchWorkspaces() {
+  const res = await fetch("http://localhost:3000/api/workspaces");
+  const data = await res.json();
 
-  if (searchLocation.value)
-    list = list.filter(w =>
-      w.property?.address.toLowerCase().includes(searchLocation.value.toLowerCase())
-    );
+  if (!data.success) {
+    alert("Failed to load data");
+    return;
+  }
 
-  if (searchNeighborhood.value)
-  list = list.filter(w =>
-    w.property?.neighborhood?.toLowerCase().includes(searchNeighborhood.value.toLowerCase())
-  );
-
-  if (maxPrice.value)
-    list = list.filter(w => w.price <= maxPrice.value);
-
-  if (minSeats.value)
-    list = list.filter(w => w.seats >= minSeats.value);
-
-  if (availableDate.value)
-  list = list.filter(w => w.date >= availableDate.value);
-
-  if (filterParking.checked)
-    list = list.filter(w => w.property?.parking);
-
-  if (filterTransport.checked)
-    list = list.filter(w => w.property?.transport);
-
-  if (smokingFilter.checked)
-    list = list.filter(w => w.smoking);
-
-  if (leaseFilter.value)
-    list = list.filter(w => w.lease === leaseFilter.value);
+  const list = data.data;
 
   results.innerHTML = "";
 
-  list.forEach(w => 
-  {
+  list.forEach(w => {
     let div = document.createElement("div");
     div.className = "workspace";
 
     div.innerHTML = `
       <h3>${w.type}</h3>
-      <p>${w.property?.address || "Unknown location"}</p>
       <p>Seats: ${w.seats}</p>
       <p>Price: $${w.price}</p>
     `;
 
-    let view = document.createElement("button");
-    view.textContent = "View Details";
-    view.onclick = () => 
-    {
-      localStorage.setItem("selectedWorkspace", JSON.stringify(w));
-      window.location.href = "details.html";
-    };
-
-    div.appendChild(view);
     results.appendChild(div);
   });
 }
